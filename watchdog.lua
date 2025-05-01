@@ -31,16 +31,16 @@ end
 while true do
     -- get tank and get integer of current benzene stored
     local tank_info = tank.getSensorInformation()
-    local stored = mysplit(tank_info[4],"§")[2]
-    -- local stored = string.sub(tank_info[4],4,12)
+    local stored = mysplit(tank_info[4],"§")[1]
+    stored = string.sub(stored,2,string.len(stored)-2)
     local num = stored:gsub("%,","")
     local number = tonumber(num)
 
-    if string.len(num) <= 9 then
-        os.execute("clear)")
-        print("Storage is empty!")
-        goto continue
-    end
+    -- if number == 0 then
+    --     os.execute("clear")
+    --     print("Storage is empty!")
+    --     goto continue
+    -- end
     
     -- negative is growth rate, aka producing > using
     rate = last - number
