@@ -5,6 +5,7 @@ local tank
 local last = 0
 local chunk = 0
 local count = 1
+local rate_msg
 
 if component.isAvailable("gt_machine") then
     tank = component.gt_machine
@@ -22,11 +23,11 @@ while true do
     number = tonumber(num)
     
     -- negative is growth rate, aka producing > using
-    rate = last - number 
+    local rate = last - number
 
     -- format of screen prints
-    form = string.format("Benzene Stored: %d", num)
-    dif = string.format("Benzene Change: %f / second", rate)
+    local form = string.format("Benzene Stored: %d", num)
+    local dif = string.format("Benzene Change: %f / second", rate)
     
     if rate > 0 then
         rate_msg = string.format("Time until empty: %f seconds", 4000000/rate)
