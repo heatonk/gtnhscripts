@@ -6,6 +6,20 @@ local last = 0
 local chunk = 0
 local count = 1
 local rate_msg
+local rate
+local form
+local dif
+
+function mysplit(inputstr, sep)
+    if sep == nil then
+      sep = "%s"
+    end
+    local t = {}
+    for str in string.gmatch(inputstr, "([^"..sep.."]+)") do
+      table.insert(t, str)
+    end
+    return t
+  end
 
 if component.isAvailable("gt_machine") then
     tank = component.gt_machine
@@ -16,18 +30,24 @@ end
 
 while true do
     -- get tank and get integer of current benzene stored
-    tank_info = tank.getSensorInformation()
-    stored = string.sub(tank_info[4],4,12)
-    num = stored:gsub("%,","")
-    if string.len(num) <= 9 then goto continue end
-    number = tonumber(num)
+    local tank_info = tank.getSensorInformation()
+    local stored = mysplit(tank_info[4],"§")[2]
+    -- local stored = string.sub(tank_info[4],4,12)
+    local num = stored:gsub("%,","")
+    local number = tonumber(num)
+
+    if string.len(num) <= 9 then
+        os.execute("clear)")
+        print("Storage is empty!")
+        goto continue
+    end
     
     -- negative is growth rate, aka producing > using
-    local rate = last - number
+    rate = last - number
 
     -- format of screen prints
-    local form = string.format("Benzene Stored: %d", num)
-    local dif = string.format("Benzene Change: %f / second", rate)
+    form = string.format("Benzene Stored: %d", num)
+    dif = string.format("Benzene Change: %f / second", rate)
     
     if rate > 0 then
         rate_msg = string.format("Time until empty: %f seconds", 4000000/rate)
