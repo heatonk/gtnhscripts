@@ -9,6 +9,7 @@ local rate_msg
 local rate
 local form
 local dif
+local chunk_rate
 
 function mysplit(inputstr, sep)
     if sep == nil then
@@ -69,6 +70,8 @@ while true do
     -- handle larger window pane avg
     count = count + 1
     if count > 5 then
+        chunk_rate = string.format("Benzene Stored: %f (5 sec average)", (chunk - number)/5)
+        print(chunk_rate)
         chunk = number
         count = 1
     end
